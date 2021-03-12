@@ -1,0 +1,37 @@
+{
+  "name": "Prospэkt",
+  "members": ["Guc", "Dan", "Mavi", "Simone", "Leo", "Gioele"],
+  "genre": "fusion indie rap",
+  "socials": {
+    "facebook": "https://www.facebook.com/prospektband/",
+    "instagram": "https://www.instagram.com/_prospekt/",
+    "spotify": "https://open.spotify.com/artist/2XpfELtxEClPUEoT9KZ28A",
+    "youtube": "https://www.youtube.com/channel/UC-KtNn7ZrHkjV7hdtws8HlQ",
+    "applemusic": "https://music.apple.com/us/artist/prosp%D1%8Dkt/1544322970",
+    "soundcloud": "https://soundcloud.com/prospekt-band"
+  },
+  "albums": [],
+  "singles": [
+    {
+      "title": "Parco Kennedy",
+      "date": "",
+      "duration": "2:34",
+      "cover": "./assets/kennedy.jpg",
+      "streaming": {
+        "youtube": "https://www.youtube.com/watch?v=fv8R8A_g3pI",
+        "soundcloud": "https://soundcloud.com/prospekt-band/parco-kennedy",
+        "applemusic": "https://music.apple.com/us/album/parco-kennedy-single/1544364210",
+        "spotify": "https://open.spotify.com/album/1WtYljSqkKinyluMSUlx3d?si=KyO_0x7oSxeImHOWk8SGLg"
+      }
+    },
+    {
+      "title": "Composizione I",
+      "date": "",
+      "duration": "3:02",
+      "cover": "./assets/composizione.png",
+      "streaming": {
+        "youtube": "https://www.youtube.com/watch?v=kpbenjgxbN0"
+      }
+    }
+  ]
+}

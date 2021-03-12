@@ -1,0 +1,11 @@
+#player-wrapper {
+  z-index: 1;
+  width: 500px;
+  height: 600px;
+  display: grid;
+  place-items: center;
+}
+
+audio {
+  display: none;
+}
