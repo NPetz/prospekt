@@ -34,66 +34,38 @@
   <body>
     <section id="songs">
       <h1>songs</h1>
-      <ul id="songlist">
-      </ul>
+      <ul id="songlist"></ul>
     </section>
 
-    <section>
-      <div id="player-wrapper">
-        <audio src="" id="player" controls></audio>
-        <img id="cover" src="" alt="" />
+    <div id="center">
+      <div id="center-content">
+        <img id="centerlogo" src="./assets/l.png" />
+        <h1 id="logotype">PROSPEKT</h1>
       </div>
-    </section>
-
-    <section id="events">
-      <h1>events</h1>
-      <ul id="eventlist">
-        <li>trieste - IT</li>
-        <li>tokyo - JP</li>
-      </ul>
-    </section>
-
-    <div id="menu">
-      <div class="social">
-        <a href=""><i class="fab fa-facebook-square"></i> </a>
-        <a href=""><i class="fab fa-instagram-square"></i></a>
-        <a href=""><i class="fab fa-spotify"></i></a>
-        <a href=""><i class="fab fa-youtube-square"></i></a>
-        <a href=""><i class="fab fa-itunes"></i></a>
-
-        <div class="logo">
-          <img src="/assets/l.png" alt="" />
-          <span>ABOUT</span>
-        </div>
-
-        
-      </div>
-
-    <div class="background">
-      <img src="assets/l.png" alt="" />
-      <h1 id="logotype">PROSPEKT</h1>
-      <div id="menu">
-        <div class="social">
-          <a href="https://www.facebook.com/prospektband/"><i class="fab fa-facebook-square"></i> </a>
-          <a href="https://www.instagram.com/_prospekt/"><i class="fab fa-instagram-square"></i></a>
-          <a href="https://open.spotify.com/artist/2XpfELtxEClPUEoT9KZ28A"><i class="fab fa-spotify"></i></a>
-          <a href="https://www.youtube.com/channel/UC-KtNn7ZrHkjV7hdtws8HlQ"><i class="fab fa-youtube-square"></i></a>
-          <a href="https://music.apple.com/us/artist/prosp%D1%8Dkt/1544322970"><i class="fab fa-itunes"></i></a>
-  
-          <div class="logo">
-            <img src="/assets/l.png" alt="" />
-            <span>ABOUT</span>
-          </div>
-  
-          
-        </div>
     </div>
+
+    <section id="about">
+      <a href="https://www.instagram.com/_prospekt/"
+        ><i class="fab fa-instagram-square"></i
+      ></a>
+      <a href="https://open.spotify.com/artist/2XpfELtxEClPUEoT9KZ28A"
+        ><i class="fab fa-spotify"></i
+      ></a>
+      <a href="https://www.youtube.com/channel/UC-KtNn7ZrHkjV7hdtws8HlQ"
+        ><i class="fab fa-youtube-square"></i
+      ></a>
+
+      <div class="logo">
+        <img src="./assets/l.png" alt="" />
+        <span>ABOUT</span>
+      </div>
+    </section>
 
     <!-- svg filter -->
     <svg>
       <filter id="blob">
         <feturbulence
-          basefrequency="0.005 0.005"
+          basefrequency="0.003 0.003"
           id="frequency1"
           numoctaves="8"
           result="noise"
@@ -104,21 +76,9 @@
           id="displacement1"
           in2="fractalNoise"
           in="SourceGraphic"
-          scale="100"
+          scale="0"
         ></fedisplacementmap>
       </filter>
     </svg>
   </body>
 </html>
-
-<!-- 
-
-
-    <h1 id="logotype">prospkt</h1>
-
-    <img class="background" src="assets/l.png" alt="" />
-
-
-
-
- -->

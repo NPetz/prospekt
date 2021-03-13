@@ -1,12 +1,6 @@
-@import "./player.css";
 @font-face {
   font-family: "Azonix";
   src: url("./assets/azonix.woff2") format("woff2");
-}
-
-:root {
-  --background: #333;
-  --main: rgb(255, 10, 70);
 }
 
 * {
@@ -20,16 +14,6 @@ svg {
   display: none;
 }
 
-#logotype {
-  /* text-shadow: whitesmoke 0 0 2px; */
-  font-size: 5.15rem;
-  text-align: left;
-  background: red;
-  background-clip: text;
-  -webkit-background-clip: text;
-  word-wrap: break-word;
-}
-
 body {
   height: 100vh;
   width: 100vw;
@@ -39,40 +23,60 @@ body {
   animation: moving-gradient 15s ease-in-out infinite alternate;
   color: whitesmoke;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
 }
-
-.background {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  object-fit: contain;
-  /* filter: url("#blob"); */
-  /* filter: url("#blob") invert() sepia(100) saturate(100) hue-rotate(45deg); */
-  /* filter: url("#blob") invert() sepia(100) saturate(100) hue-rotate(45deg)
-    drop-shadow(0 0 40px white); */
-  /* mix-blend-mode: multiply; */
-  /* mix-blend-mode: exclusion; */
-  width: 500px;
-}
-
 section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5rem 3rem;
+  flex-grow: 1;
+  display: grid;
+  place-items: center;
 }
 
-#songlist,
-#eventlist {
-  margin-top: 3rem;
+#center {
+  filter: url("#blob");
+  mix-blend-mode: luminosity;
+  /* mix-blend-mode: multiply; */
+  width: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
   align-items: center;
-  justify-items: center;
-  gap: 1rem;
+  justify-content: center;
+}
+
+#center-content {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 2px black);
+}
+
+#centerlogo {
+  width: 100%;
+  margin-bottom: 0.1rem;
+  filter: invert();
+}
+#centerlogo:hover {
+  cursor: pointer;
+}
+
+#logotype {
+  /* text-shadow: whitesmoke 0 0 2px; */
+  width: 100%;
+  font-size: calc((100vw - 2rem) * 0.6 / 6.11);
+  text-align: left;
+  color: transparent;
+  background-image: linear-gradient(90deg, black 50%, whitesmoke 0%);
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  word-wrap: break-word;
+  background-position-x: 0%;
 }
 
 ul,
@@ -81,111 +85,73 @@ li {
   width: 100%;
 }
 
+ul {
+  display: none;
+}
+
+li.active::before,
+li.active::after {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+li.active::before {
+  content: "<";
+}
+li.active::after {
+  content: ">";
+}
+
 li {
   width: 100%;
-  max-width: 100%;
-  padding: 1rem;
-  backdrop-filter: blur(10px);
-  box-shadow: whitesmoke 0 1px 0, whitesmoke 0 -1px 0;
   cursor: pointer;
   transition: 0.2s all;
   position: relative;
-}
-
-li:hover {
-  color: #333;
-  background: whitesmoke;
-}
-
-#eventlist li:hover {
+  display: none;
   height: 100%;
-}
-#eventlist li:nth-child(1)::before {
-  content: "4/13 ";
-  display: inline-block;
-  position: absolute;
-  right: 2rem;
+  text-align: center;
 }
 
-#eventlist li:nth-child(1):hover::after {
-  height: 100%;
-  content: "4/13/21 00:15\00000a@ around midnight";
-  display: grid;
-  place-items: center;
-  white-space: pre;
-  line-height: 2rem;
-  font-size: 1rem;
-}
-#eventlist li:nth-child(2)::before {
-  content: "5/05 ";
-  display: inline-block;
-  position: absolute;
-  right: 2rem;
-}
-
-#eventlist li:nth-child(2):hover::after {
-  height: 100%;
-  content: "5/05/21 21:00\00000a@ DA--MEDA";
-  display: grid;
-  place-items: center;
-  white-space: pre;
-  line-height: 2rem;
-  font-size: 1rem;
-}
-
-.background img {
-  width: 100%;
-  position: relative
+li.active {
+  display: block;
 }
 
 .logo {
+  text-align: center;
+  color: whitesmoke;
+  width: 40px;
+  height: 40px;
+  font-size: 10px;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
 }
-
 .logo img {
-  width: 60px;
-  height: 100%;
+  width: 100%;
+  margin-bottom: 0.2rem;
+  border-radius: 8px;
+  filter: invert();
+  mix-blend-mode: lighten;
+}
+
+#about {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 40px;
+  filter: drop-shadow(0px 3px 2px #333);
+}
+#about i {
+  color: whitesmoke;
+}
+
+#songs h1,
+#songs li {
+  filter: drop-shadow(0px 3px 2px #333);
   cursor: pointer;
 }
-/* .logo img:hover {
-  filter: url("#blob");
-} */
-
-#menu {
-  position: absolute;
-  left: -5rem;
-  bottom: 0rem;
-}
-
-.social {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.4rem;
-}
-
-.social:focus-within a {
-  display: block;
-}
-.social:focus a {
-  display: block;
-}
-.social:hover a {
-  display: block;
-}
-
-.social a {
-  display: none;
-  font-size: 50px;
-  color: whitesmoke;
-  opacity: 1;
-  transition: 0.2s all;
-}
-/* .social a:hover {
-  color: var(--background);
-} */
 
 /* animations */
 
@@ -201,5 +167,50 @@ li:hover {
   }
   100% {
     background-position: bottom;
+  }
+}
+
+/* queries */
+
+@media (min-width: 768px) {
+  body {
+    flex-direction: row;
+  }
+
+  section {
+    display: grid;
+    width: 25vw;
+  }
+  #center {
+    width: 50vw;
+    flex-grow: 1;
+  }
+  #logotype {
+    /* text-shadow: whitesmoke 0 0 2px; */
+    font-size: calc((50vw - 2rem) * 0.6 / 6.11);
+  }
+  html {
+    font-size: 20px;
+  }
+  li.active::before,
+  li.active::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  li.active::before {
+    content: "^";
+
+    padding-bottom: 1rem;
+  }
+  li.active::after {
+    content: "^";
+    transform: rotateZ(180deg);
+    padding-bottom: 1rem;
+  }
+  #about {
+    flex-direction: column;
   }
 }
