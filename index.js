@@ -51,16 +51,16 @@ audio.addEventListener('timeupdate', () => {
     center.style.transform = `scale(1.${magnitude / 256})`
 
 })
-cover.addEventListener("click", () => {
+cover.addEventListener("click", async () => {
 
 
     if (currentIndex !== undefined && currentIndex !== 'about') {
 
         if (audio.paused) {
 
-            src.mediaElement.play()
+            await audio.play()
         } else {
-            src.mediaElement.pause()
+            audio.pause()
         }
 
     } else {
@@ -149,17 +149,22 @@ function updateLogotype(index) {
             break;
     }
 }
-function updateAudio(index) {
+async function updateAudio(index) {
 
     if (index === 'about' || index === undefined) {
         return
     }
 
+    await actx.resume()
+
 
     audio.src = index === 1 ? './assets/composizione.mp3' : './assets/parco.mp3'
     audio.load()
 
-    audio.addEventListener('canplay', () => { audio.play() }, { once: true })
+    audio.addEventListener('canplay', () => {
+        audio.play()
+        console.log('can play');
+    }, { once: true })
 
 
 }
