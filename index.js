@@ -20,11 +20,11 @@ const actx = new AudioContext();
 const analyser = actx.createAnalyser();
 
 const fftSize = 128;
-let src = null;
 let bufferLength = null;
 let dataArray = null;
 
 let audio = new Audio()
+let src = actx.createMediaElementSource(audio)
 
 // 
 
@@ -40,7 +40,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 })
 
 
-player.addEventListener('timeupdate', () => {
+audio.addEventListener('timeupdate', () => {
 
     let percentage = Math.trunc(player.currentTime * 100 / player.duration)
     logotype.style.backgroundPositionX = `${percentage}%`
@@ -68,11 +68,11 @@ cover.addEventListener("click", () => {
 
     if (currentIndex !== undefined && currentIndex !== 'about') {
 
-        if (player.paused) {
-            player.play()
+        if (audio.paused) {
+            // player.play()
             audio.play()
         } else {
-            player.pause()
+            // player.pause()
             audio.pause()
         }
 
@@ -99,49 +99,49 @@ songs.addEventListener('click', () => {
 
 
 
-async function getYoutubeAudioStreamUrl(videoId) {
+// async function getYoutubeAudioStreamUrl(videoId) {
 
-    let corsProxy = 'https://api.allorigins.win/get?url='
-    let youtubeUrl = "https://youtube.com/get_video_info?video_id="
-    let url = youtubeUrl + videoId
-
-
-
-    try {
-
-        let res = await fetch(url)
-        let data = await res.text()
-        data = parseYtData(data)
-        let formats = JSON.parse(data.player_response).streamingData.adaptiveFormats;
-        let findAudioInfo = formats.findIndex(obj => obj.audioQuality);
-        let audioURL = formats[findAudioInfo].url;
-
-        return audioURL
+//     let corsProxy = 'https://api.allorigins.win/get?url='
+//     let youtubeUrl = "https://youtube.com/get_video_info?video_id="
+//     let url = corsProxy + youtubeUrl + videoId
 
 
 
-    } catch (error) {
-        console.log(error)
-    }
+//     try {
 
-    function parseYtData(str) {
-        return str.split('&').reduce(function (params, param) {
-            var paramSplit = param.split('=').map(function (value) {
-                return decodeURIComponent(value.replace('+', ' '));
-            });
-            params[paramSplit[0]] = paramSplit[1];
-            return params;
-        }, {});
-    }
+//         let res = await fetch(url)
+//         let data = await res.text()
+//         data = parseYtData(data)
+//         let formats = JSON.parse(data.player_response).streamingData.adaptiveFormats;
+//         let findAudioInfo = formats.findIndex(obj => obj.audioQuality);
+//         let audioURL = formats[findAudioInfo].url;
+
+//         return audioURL
 
 
 
-}
-function getVideoId(youtubeUrl) {
+//     } catch (error) {
+//         console.log(error)
+//     }
 
-    return youtubeUrl.replace("https://www.youtube.com/watch?v=", "")
+//     function parseYtData(str) {
+//         return str.split('&').reduce(function (params, param) {
+//             var paramSplit = param.split('=').map(function (value) {
+//                 return decodeURIComponent(value.replace('+', ' '));
+//             });
+//             params[paramSplit[0]] = paramSplit[1];
+//             return params;
+//         }, {});
+//     }
 
-}
+
+
+// }
+// function getVideoId(youtubeUrl) {
+
+//     return youtubeUrl.replace("https://www.youtube.com/watch?v=", "")
+
+// }
 async function initializeSongsList() {
 
     let res = await fetch("./data.json")
@@ -206,8 +206,6 @@ function updateCover(index) {
 }
 function updateLogotype(index) {
 
-
-
     switch (index) {
         case 0:
             logotype.innerText = songsUrls[index].title
@@ -233,12 +231,11 @@ function updateAnalyzer(index) {
         return
     }
 
-    audio = new Audio()
     audio.src = index === 1 ? './assets/composizione.mp3' : './assets/parco.mp3'
     audio.load()
 
-    src = actx.createMediaElementSource(audio);
     src.connect(analyser);
+    analyser.connect(actx.destination);
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
@@ -271,7 +268,7 @@ function updateEverything(index) {
 
     updateCover(index)
     updateLogotype(index)
-    updatePlayer(index)
+    // updatePlayer(index)
     updateAnalyzer(index)
     updateSongList(index)
 
@@ -318,4 +315,4 @@ function* nameGenerator() {
     yield 'prospekt';
 }
 
-const gen = nameGenerator(); // "Generator { }"
+const gen = nameGenerator();
