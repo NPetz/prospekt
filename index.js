@@ -7,42 +7,32 @@ const songlist = document.querySelector("#songlist")
 const about = document.querySelector(".logo img")
 const songs = document.querySelector("#songs")
 
-
-
 let songsUrls
 let currentIndex
-let player = new Audio()
 
 
 // analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-const actx = new AudioContext();
+let actx = new AudioContext();
 const analyser = actx.createAnalyser();
 
-const fftSize = 128;
-let bufferLength = null;
-let dataArray = null;
+let bufferLength = analyser.frequencyBinCount;
+let dataArray = new Uint8Array(bufferLength);
 
 let audio = new Audio()
 let src = actx.createMediaElementSource(audio)
-
-// 
-
-
+src.connect(analyser);
+analyser.connect(actx.destination);
 
 
+initializeSongsList()
 
-window.addEventListener("DOMContentLoaded", async () => {
 
-    // load songs data, create li elements
-    await initializeSongsList()
-
-})
 
 
 audio.addEventListener('timeupdate', () => {
 
-    let percentage = Math.trunc(player.currentTime * 100 / player.duration)
+    let percentage = Math.trunc(audio.currentTime * 100 / audio.duration)
     logotype.style.backgroundPositionX = `${percentage}%`
 
     analyser.getByteFrequencyData(dataArray)
@@ -50,8 +40,6 @@ audio.addEventListener('timeupdate', () => {
     let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
 
     let magnitude = Math.trunc(sum / bufferLength)
-
-    console.log(magnitude)
 
     filter.querySelector('fedisplacementmap').setAttribute('scale', magnitude)
 
@@ -69,11 +57,10 @@ cover.addEventListener("click", () => {
     if (currentIndex !== undefined && currentIndex !== 'about') {
 
         if (audio.paused) {
-            // player.play()
-            audio.play()
+
+            src.mediaElement.play()
         } else {
-            // player.pause()
-            audio.pause()
+            src.mediaElement.pause()
         }
 
     } else {
@@ -96,52 +83,6 @@ songs.addEventListener('click', () => {
     updateEverything(0)
 })
 
-
-
-
-// async function getYoutubeAudioStreamUrl(videoId) {
-
-//     let corsProxy = 'https://api.allorigins.win/get?url='
-//     let youtubeUrl = "https://youtube.com/get_video_info?video_id="
-//     let url = corsProxy + youtubeUrl + videoId
-
-
-
-//     try {
-
-//         let res = await fetch(url)
-//         let data = await res.text()
-//         data = parseYtData(data)
-//         let formats = JSON.parse(data.player_response).streamingData.adaptiveFormats;
-//         let findAudioInfo = formats.findIndex(obj => obj.audioQuality);
-//         let audioURL = formats[findAudioInfo].url;
-
-//         return audioURL
-
-
-
-//     } catch (error) {
-//         console.log(error)
-//     }
-
-//     function parseYtData(str) {
-//         return str.split('&').reduce(function (params, param) {
-//             var paramSplit = param.split('=').map(function (value) {
-//                 return decodeURIComponent(value.replace('+', ' '));
-//             });
-//             params[paramSplit[0]] = paramSplit[1];
-//             return params;
-//         }, {});
-//     }
-
-
-
-// }
-// function getVideoId(youtubeUrl) {
-
-//     return youtubeUrl.replace("https://www.youtube.com/watch?v=", "")
-
-// }
 async function initializeSongsList() {
 
     let res = await fetch("./data.json")
@@ -166,21 +107,6 @@ async function initializeSongsList() {
     })
 
 
-}
-async function updatePlayer(index) {
-
-    if (index === 'about' || index === undefined) {
-        player.src = ''
-        return
-    }
-
-    let song = songsUrls[index]
-
-
-    let url = song.streaming.youtube
-    url = getVideoId(url)
-    url = await getYoutubeAudioStreamUrl(url)
-    player.src = url
 }
 function updateCover(index) {
 
@@ -218,26 +144,23 @@ function updateLogotype(index) {
             break;
         case 'about':
             if (currentIndex !== 'about') {
-                console.log(currentIndex)
                 cycleNames()
             }
             break;
     }
 }
-function updateAnalyzer(index) {
+function updateAudio(index) {
 
     if (index === 'about' || index === undefined) {
-        audio.src = ''
         return
     }
+
 
     audio.src = index === 1 ? './assets/composizione.mp3' : './assets/parco.mp3'
     audio.load()
 
-    src.connect(analyser);
-    analyser.connect(actx.destination);
-    bufferLength = analyser.frequencyBinCount;
-    dataArray = new Uint8Array(bufferLength);
+    audio.addEventListener('canplay', () => { audio.play() }, { once: true })
+
 
 }
 function updateSongList(index) {
@@ -262,14 +185,12 @@ function updateEverything(index) {
 
     if (index === currentIndex) {
 
-        console.log('same index')
         return
     }
 
     updateCover(index)
     updateLogotype(index)
-    // updatePlayer(index)
-    updateAnalyzer(index)
+    updateAudio(index)
     updateSongList(index)
 
     currentIndex = index
