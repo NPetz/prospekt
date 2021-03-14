@@ -103,7 +103,7 @@ async function getYoutubeAudioStreamUrl(videoId) {
 
     let corsProxy = 'https://api.allorigins.win/get?url='
     let youtubeUrl = "https://youtube.com/get_video_info?video_id="
-    let url = corsProxy + youtubeUrl + videoId
+    let url = youtubeUrl + videoId
 
 
 
