@@ -51,6 +51,8 @@ player.addEventListener('timeupdate', () => {
 
     let magnitude = Math.trunc(sum / bufferLength)
 
+    console.log(magnitude)
+
     filter.querySelector('fedisplacementmap').setAttribute('scale', magnitude)
 
     if (magnitude > 50) {
@@ -182,18 +184,29 @@ async function updatePlayer(index) {
 }
 function updateCover(index) {
 
-    if (index === undefined) {
-        cover.src = './assets/l.png'
-    } else if (index === 'about') {
-
-        cover.src = './assets/group.jpg'
-
-    } else {
-
-        cover.src = index === 1 ? './assets/composizione.png' : './assets/kennedy.jpg'
+    switch (index) {
+        case 0:
+            cover.src = './assets/kennedy.jpg'
+            center.classList.remove('about')
+            break;
+        case 1:
+            cover.src = './assets/composizione.png'
+            center.classList.remove('about')
+            break;
+        case undefined:
+            cover.src = './assets/l.png'
+            center.classList.remove('about')
+            break;
+        case 'about':
+            cover.src = './assets/group.jpg'
+            center.classList.add('about')
+            break;
     }
+
 }
 function updateLogotype(index) {
+
+
 
     switch (index) {
         case 0:
@@ -206,7 +219,10 @@ function updateLogotype(index) {
             logotype.innerText = 'prospekt'
             break;
         case 'about':
-            logotype.innerText = 'we\'re a melodic indie rap band from trieste'
+            if (currentIndex !== 'about') {
+                console.log(currentIndex)
+                cycleNames()
+            }
             break;
     }
 }
@@ -262,3 +278,44 @@ function updateEverything(index) {
     currentIndex = index
 }
 
+function cycleNames() {
+
+
+
+    logotype.innerText = gen.next().value
+    let a = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 5000)
+    let b = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 12000)
+    let c = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 19000)
+    let d = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 26000)
+    let e = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 33000)
+    let f = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 40000)
+    let g = setTimeout(() => {
+        logotype.innerText = gen.next().value
+    }, 47000)
+}
+
+
+function* nameGenerator() {
+    yield 'prospekt';
+    yield 'leo:vocals';
+    yield 'dan:guitar';
+    yield 'mavi:vocals';
+    yield 'guc:bass';
+    yield 'gioele:drums';
+    yield 'simone:keys';
+    yield 'prospekt';
+}
+
+const gen = nameGenerator(); // "Generator { }"
