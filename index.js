@@ -1,4 +1,5 @@
 
+const body = document.body
 const cover = document.querySelector("#centerlogo")
 const center = document.querySelector('#center')
 const centerContent = document.querySelector('#center-content')
@@ -7,9 +8,15 @@ const filter = document.querySelector("#blob")
 const songlist = document.querySelector("#songlist")
 const about = document.querySelector(".logo img")
 const songs = document.querySelector("#songs")
+const pausePlay = document.querySelector('#pausePlay')
 
 const displacementMap = filter.querySelector('fedisplacementmap')
 const turbulence = filter.querySelector('feturbulence')
+
+const gradients = ['linear-gradient(to bottom, #eb5757, #222)', 'linear-gradient(to bottom, #1247b8, #e01c36)', 'linear-gradient(to bottom, #fffb29, #7c04af)', 'linear-gradient(to bottom, #00467f, #2fb643)'
+
+
+]
 
 let songsUrls
 let currentIndex
@@ -58,41 +65,18 @@ audio.addEventListener('timeupdate', () => {
 
         }
 
-
+        let percentage = Math.trunc(currentTime * 100 / audio.duration)
+        logotype.style.backgroundPositionX = `${100 - percentage}%`
 
         previousTime = currentTime
     }
 
-
-
-    // let percentage = Math.trunc(audio.currentTime * 100 / audio.duration)
-    // logotype.style.backgroundPositionX = `${percentage}%`
-
-
-
-    // 
-
-    // let magnitude = Math.trunc(sum / bufferLength)
-
 })
-cover.addEventListener("click", async () => {
+
+pausePlay.addEventListener("click", playPause)
+cover.addEventListener("click", playPause)
 
 
-    if (currentIndex !== undefined && currentIndex !== 'about') {
-
-        if (audio.paused) {
-            await actx.resume()
-            await audio.play()
-        } else {
-            audio.pause()
-        }
-
-    } else {
-
-        updateEverything()
-    }
-
-})
 about.addEventListener('click', () => {
 
     if (currentIndex === 'about') {
@@ -149,6 +133,7 @@ function updateCover(index) {
 
     }
 
+
 }
 function updateLogotype(index) {
 
@@ -164,7 +149,11 @@ function updateLogotype(index) {
             break;
         case 'about':
             if (currentIndex !== 'about') {
-                cycleNames()
+                let animation = cycleNames()
+
+                const stopAnimation = () => clearInterval(animation)
+                songs.addEventListener("click", stopAnimation, { once: true })
+                about.addEventListener("click", stopAnimation, { once: true })
             }
             break;
     }
@@ -207,7 +196,7 @@ function updateSongList(index) {
 }
 function updateEverything(index) {
 
-    logotype.style.backgroundPositionX = `0%`
+    logotype.style.backgroundPositionX = `100%`
 
     if (index === currentIndex) {
 
@@ -220,46 +209,91 @@ function updateEverything(index) {
     updateSongList(index)
 
     currentIndex = index
+
+    body.style.background = gradients[Math.trunc(Math.random() * gradients.length)]
+    body.style.backgroundSize = '400% 400%'
+    body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
+
 }
 
 function cycleNames() {
 
 
+    const gen = namesGenerator();
 
     logotype.innerText = gen.next().value
-    let a = setTimeout(() => {
+
+    let a = setInterval(() => {
         logotype.innerText = gen.next().value
     }, 3000)
-    let b = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 6000)
-    let c = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 9000)
-    let d = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 12000)
-    let e = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 15000)
-    let f = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 18000)
-    let g = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 21000)
+
+    setTimeout(() => {
+        clearInterval(a)
+        console.log('cleared')
+    }, 22000)
+
+    return a
+
 }
 
 
 function* namesGenerator() {
     yield 'prospekt';
-    yield 'leo:vocals';
-    yield 'dan:guitar';
-    yield 'mavi:vocals';
-    yield 'guc:bass';
-    yield 'gioele:drums';
-    yield 'simone:keys';
+    yield 'leo - vocals';
+    yield 'dan - guitar';
+    yield 'mavi - vocals';
+    yield 'guc - bass';
+    yield 'gioele - drums';
+    yield 'simone - keys';
     yield 'prospekt';
 }
 
-const gen = namesGenerator();
+
+function displacementToZeroAnimation() {
+
+    let scale = displacementMap.getAttribute("scale")
+
+    let stepSize = 20
+
+
+    let animation = setInterval(() => {
+
+
+        let newScale = scale - stepSize
+
+        if (newScale <= 0) {
+            displacementMap.setAttribute("scale", `0`)
+            clearInterval(animation)
+            return
+        }
+
+        displacementMap.setAttribute("scale", `${newScale}`)
+
+        scale = newScale
+
+    }, 100);
+
+}
+
+
+async function playPause() {
+
+
+    if (audio.src) {
+
+        if (audio.paused) {
+            await actx.resume()
+            await audio.play()
+            center.classList.add('playing')
+            center.classList.remove('paused')
+        } else {
+            audio.pause()
+            displacementToZeroAnimation()
+            center.classList.add('paused')
+            center.classList.remove('playing')
+        }
+    } else {
+        console.log('no sources')
+    }
+
+}

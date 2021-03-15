@@ -17,9 +17,8 @@ svg {
 body {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(to bottom, #1247b8, #e01c36);
+  background: linear-gradient(to bottom, #2a4e9c, #e01c36);
   background-size: 400% 400%;
-  color: transparent;
   animation: moving-gradient 15s ease-in-out infinite alternate;
   color: whitesmoke;
   display: flex;
@@ -64,13 +63,17 @@ section {
 #centerlogo:hover {
   cursor: pointer;
 }
+#center-content:hover {
+  /* animation: rotation 2.5s ease-in-out 1; */
+  /* filter: none; */
+}
 
 #center.about #center-content {
   transform: scale(1.5);
 }
 
 #center.about #centerlogo {
-  animation: show-faces 20s cubic-bezier(0.165, 0.840, 0.440, 1.000) 3s 1 alternate;
+  animation: show-faces 20s cubic-bezier(0.165, 0.84, 0.44, 1) 3s 1 alternate;
   /* filter: none; */
 }
 
@@ -82,19 +85,25 @@ section {
 }
 
 #logotype {
-  /* text-shadow: whitesmoke 0 0 2px; */
   width: 100%;
   font-size: calc(100vw * 0.6 / 6.11);
   text-align: left;
   color: transparent;
-  background-image: linear-gradient(90deg, whitesmoke 50%, black 0%);
+  background-image: linear-gradient(90deg, black 50%, whitesmoke 50%);
   background-origin: border-box;
   background-repeat: no-repeat;
   background-size: 200%;
   background-clip: text;
   -webkit-background-clip: text;
   word-wrap: break-word;
-  background-position-x: 0%;
+  background-position-x: 100%;
+}
+
+.playing #logotype:hover {
+  cursor: crosshair;
+}
+.paused #logotype:hover {
+  cursor: move;
 }
 
 ul,
@@ -159,10 +168,12 @@ li.active {
   align-items: center;
   justify-content: space-around;
   font-size: 40px;
-  filter: drop-shadow(0px 3px 2px #333);
 }
 #about i {
   color: whitesmoke;
+}
+#about i:hover {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 #songs h1,
@@ -222,7 +233,14 @@ li.active {
     transform-origin: 50% 50%;
   }
 }
-
+@keyframes rotation {
+  0% {
+    transform: perspective(1000px);
+  }
+  100% {
+    transform: perspective(1000px) rotate3d(1, 1, 0, 360deg);
+  }
+}
 /* queries */
 
 @media (min-width: 768px) {
