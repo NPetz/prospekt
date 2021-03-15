@@ -14,7 +14,7 @@ const turbulence = filter.querySelector('feturbulence')
 let songsUrls
 let currentIndex
 
-const logoUrl = "./assets/pictures/l.jpg"
+const logoUrl = "./assets/pictures/l.png"
 const groupPictureUrl = "./assets/pictures/group.jpg"
 
 // 
@@ -54,6 +54,7 @@ audio.addEventListener('timeupdate', () => {
         if (sum / bufferLength > 150) {
 
             turbulence.setAttribute('seed', sum)
+            displacementMap.setAttribute('scale', sum / bufferLength)
 
         }
 
@@ -80,7 +81,7 @@ cover.addEventListener("click", async () => {
     if (currentIndex !== undefined && currentIndex !== 'about') {
 
         if (audio.paused) {
-
+            await actx.resume()
             await audio.play()
         } else {
             audio.pause()
@@ -143,7 +144,6 @@ function updateCover(index) {
             break;
         default:
             cover.src = songsUrls[index].cover
-            console.log(songsUrls[index].cover)
             center.classList.remove('about')
             break;
 
@@ -229,25 +229,25 @@ function cycleNames() {
     logotype.innerText = gen.next().value
     let a = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 5000)
+    }, 3000)
     let b = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 12000)
+    }, 6000)
     let c = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 19000)
+    }, 9000)
     let d = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 26000)
+    }, 12000)
     let e = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 33000)
+    }, 15000)
     let f = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 40000)
+    }, 18000)
     let g = setTimeout(() => {
         logotype.innerText = gen.next().value
-    }, 47000)
+    }, 21000)
 }
 
 

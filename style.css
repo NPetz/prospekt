@@ -70,7 +70,7 @@ section {
 }
 
 #center.about #centerlogo {
-  animation: show-faces 50s ease-in-out 3s 1 alternate;
+  animation: show-faces 20s cubic-bezier(0.165, 0.840, 0.440, 1.000) 3s 1 alternate;
   /* filter: none; */
 }
 
@@ -193,27 +193,27 @@ li.active {
     transform: scale(1);
     transform-origin: 50% 50%;
   }
-  5% {
+  10% {
     transform: scale(2);
     transform-origin: 50% 0%;
   }
-  20% {
+  25% {
     transform: scale(3);
     transform-origin: 0% 0%;
   }
-  35% {
+  40% {
     transform: scale(2.3);
     transform-origin: 100% 70%;
   }
-  50% {
+  55% {
     transform: scale(3.2);
     transform-origin: 25% 10%;
   }
-  65% {
+  70% {
     transform: scale(3);
     transform-origin: 90% 20%;
   }
-  80% {
+  85% {
     transform: scale(2.5);
     transform-origin: 10% 50%;
   }
