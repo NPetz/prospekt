@@ -7,26 +7,8 @@
     <script
       src="https://kit.fontawesome.com/e5d0884dd3.js"
       crossorigin="anonymous"
+      async
     ></script>
-
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="./favicons/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./favicons/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./favicons/favicon-16x16.png"
-    />
-    <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="style.css" />
     <script src="index.js" type="module" type="text/javascript" defer></script>
     <title>Prospэkt</title>
@@ -39,7 +21,7 @@
 
     <div id="center">
       <div id="center-content">
-        <img id="centerlogo" src="./assets/l.png" />
+        <img id="centerlogo" src="./assets/pictures/l.png" />
         <h1 id="logotype">PROSPEKT</h1>
       </div>
     </div>
@@ -56,7 +38,7 @@
       ></a>
 
       <div class="logo">
-        <img src="./assets/l.png" alt="" />
+        <img src="./assets/pictures/l.png" />
         <span>ABOUT</span>
       </div>
     </section>
@@ -65,9 +47,9 @@
     <svg>
       <filter id="blob">
         <feturbulence
-          basefrequency="0.003 0.003"
+          basefrequency="0.01 0.005"
           id="frequency1"
-          numoctaves="8"
+          numoctaves="1"
           result="noise"
           seed="1"
           type="fractalNoise"
@@ -76,7 +58,7 @@
           id="displacement1"
           in2="fractalNoise"
           in="SourceGraphic"
-          scale="0"
+          scale="100"
         ></fedisplacementmap>
       </filter>
     </svg>

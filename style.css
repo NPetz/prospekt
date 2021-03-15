@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Azonix";
-  src: url("./assets/azonix.woff2") format("woff2");
+  src: url("./assets/fonts/azonix.woff2") format("woff2");
 }
 
 * {
@@ -17,7 +17,7 @@ svg {
 body {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(to bottom, #12b820, #e01c36);
+  background: linear-gradient(to bottom, #1247b8, #e01c36);
   background-size: 400% 400%;
   color: transparent;
   animation: moving-gradient 15s ease-in-out infinite alternate;
@@ -59,7 +59,7 @@ section {
 #centerlogo {
   width: 100%;
   margin-bottom: 0.2rem;
-  filter: invert();
+  /* filter: invert(); */
 }
 #centerlogo:hover {
   cursor: pointer;
@@ -71,7 +71,7 @@ section {
 
 #center.about #centerlogo {
   animation: show-faces 50s ease-in-out 3s 1 alternate;
-  filter: none;
+  /* filter: none; */
 }
 
 #center.about #logotype {

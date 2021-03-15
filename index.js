@@ -1,20 +1,32 @@
 
 const cover = document.querySelector("#centerlogo")
 const center = document.querySelector('#center')
+const centerContent = document.querySelector('#center-content')
 const logotype = document.querySelector("#logotype")
 const filter = document.querySelector("#blob")
 const songlist = document.querySelector("#songlist")
 const about = document.querySelector(".logo img")
 const songs = document.querySelector("#songs")
 
+const displacementMap = filter.querySelector('fedisplacementmap')
+const turbulence = filter.querySelector('feturbulence')
+
 let songsUrls
 let currentIndex
+
+const logoUrl = "./assets/pictures/l.jpg"
+const groupPictureUrl = "./assets/pictures/group.jpg"
+
+// 
+let previousTime = 0
+// 
 
 
 // analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let actx = new AudioContext();
 const analyser = actx.createAnalyser();
+analyser.fftSize = 64;
 
 let bufferLength = analyser.frequencyBinCount;
 let dataArray = new Uint8Array(bufferLength);
@@ -32,23 +44,34 @@ initializeSongsList()
 
 audio.addEventListener('timeupdate', () => {
 
-    let percentage = Math.trunc(audio.currentTime * 100 / audio.duration)
-    logotype.style.backgroundPositionX = `${percentage}%`
+    let currentTime = audio.currentTime
 
-    analyser.getByteFrequencyData(dataArray)
+    if (currentTime - previousTime > 0.01) {
 
-    let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
+        analyser.getByteTimeDomainData(dataArray)
+        let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
 
-    let magnitude = Math.trunc(sum / bufferLength)
+        if (sum / bufferLength > 150) {
 
-    filter.querySelector('fedisplacementmap').setAttribute('scale', magnitude)
+            turbulence.setAttribute('seed', sum)
 
-    if (magnitude > 50) {
-        filter.querySelector('feturbulence').setAttribute('seed', percentage)
+        }
 
+
+
+        previousTime = currentTime
     }
 
-    center.style.transform = `scale(1.${magnitude / 256})`
+
+
+    // let percentage = Math.trunc(audio.currentTime * 100 / audio.duration)
+    // logotype.style.backgroundPositionX = `${percentage}%`
+
+
+
+    // 
+
+    // let magnitude = Math.trunc(sum / bufferLength)
 
 })
 cover.addEventListener("click", async () => {
@@ -99,8 +122,7 @@ async function initializeSongsList() {
         li.setAttribute('data-order', ix)
         li.addEventListener("click", (e) => {
             e.stopPropagation()
-            let index = currentIndex === 0 ? 1 : 0
-            updateEverything(index)
+            updateEverything(+!ix)
         })
         songlist.prepend(li)
 
@@ -111,22 +133,20 @@ async function initializeSongsList() {
 function updateCover(index) {
 
     switch (index) {
-        case 0:
-            cover.src = './assets/kennedy.jpg'
-            center.classList.remove('about')
-            break;
-        case 1:
-            cover.src = './assets/composizione.png'
-            center.classList.remove('about')
-            break;
         case undefined:
-            cover.src = './assets/l.png'
+            cover.src = logoUrl
             center.classList.remove('about')
             break;
         case 'about':
-            cover.src = './assets/group.jpg'
+            cover.src = groupPictureUrl
             center.classList.add('about')
             break;
+        default:
+            cover.src = songsUrls[index].cover
+            console.log(songsUrls[index].cover)
+            center.classList.remove('about')
+            break;
+
     }
 
 }
@@ -149,6 +169,7 @@ function updateLogotype(index) {
             break;
     }
 }
+
 async function updateAudio(index) {
 
     if (index === 'about' || index === undefined) {
@@ -158,7 +179,7 @@ async function updateAudio(index) {
     await actx.resume()
 
 
-    audio.src = index === 1 ? './assets/composizione.mp3' : './assets/parco.mp3'
+    audio.src = songsUrls[index].src
     audio.load()
 
     audio.addEventListener('canplay', () => {
@@ -230,7 +251,7 @@ function cycleNames() {
 }
 
 
-function* nameGenerator() {
+function* namesGenerator() {
     yield 'prospekt';
     yield 'leo:vocals';
     yield 'dan:guitar';
@@ -241,4 +262,4 @@ function* nameGenerator() {
     yield 'prospekt';
 }
 
-const gen = nameGenerator();
+const gen = namesGenerator();
