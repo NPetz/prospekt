@@ -1,20 +1,39 @@
 
+const body = document.body
 const cover = document.querySelector("#centerlogo")
 const center = document.querySelector('#center')
+const centerContent = document.querySelector('#center-content')
 const logotype = document.querySelector("#logotype")
 const filter = document.querySelector("#blob")
 const songlist = document.querySelector("#songlist")
 const about = document.querySelector(".logo img")
 const songs = document.querySelector("#songs")
+const pausePlay = document.querySelector('#pausePlay')
+
+const displacementMap = filter.querySelector('fedisplacementmap')
+const turbulence = filter.querySelector('feturbulence')
+
+const gradients = ['linear-gradient(to bottom, #eb5757, #222)', 'linear-gradient(to bottom, #1247b8, #e01c36)', 'linear-gradient(to bottom, #fffb29, #7c04af)', 'linear-gradient(to bottom, #00467f, #2fb643)'
+
+
+]
 
 let songsUrls
 let currentIndex
+
+const logoUrl = "./assets/pictures/l.png"
+const groupPictureUrl = "./assets/pictures/group.jpg"
+
+// 
+let previousTime = 0
+// 
 
 
 // analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let actx = new AudioContext();
 const analyser = actx.createAnalyser();
+analyser.fftSize = 64;
 
 let bufferLength = analyser.frequencyBinCount;
 let dataArray = new Uint8Array(bufferLength);
@@ -32,43 +51,32 @@ initializeSongsList()
 
 audio.addEventListener('timeupdate', () => {
 
-    let percentage = Math.trunc(audio.currentTime * 100 / audio.duration)
-    logotype.style.backgroundPositionX = `${percentage}%`
+    let currentTime = audio.currentTime
 
-    analyser.getByteFrequencyData(dataArray)
+    if (currentTime - previousTime > 0.01) {
 
-    let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
+        analyser.getByteTimeDomainData(dataArray)
+        let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
 
-    let magnitude = Math.trunc(sum / bufferLength)
+        if (sum / bufferLength > 150) {
 
-    filter.querySelector('fedisplacementmap').setAttribute('scale', magnitude)
+            turbulence.setAttribute('seed', sum)
+            displacementMap.setAttribute('scale', sum / bufferLength)
 
-    if (magnitude > 50) {
-        filter.querySelector('feturbulence').setAttribute('seed', percentage)
-
-    }
-
-    center.style.transform = `scale(1.${magnitude / 256})`
-
-})
-cover.addEventListener("click", async () => {
-
-
-    if (currentIndex !== undefined && currentIndex !== 'about') {
-
-        if (audio.paused) {
-
-            await audio.play()
-        } else {
-            audio.pause()
         }
 
-    } else {
+        let percentage = Math.trunc(currentTime * 100 / audio.duration)
+        logotype.style.backgroundPositionX = `${100 - percentage}%`
 
-        updateEverything()
+        previousTime = currentTime
     }
 
 })
+
+pausePlay.addEventListener("click", playPause)
+cover.addEventListener("click", playPause)
+
+
 about.addEventListener('click', () => {
 
     if (currentIndex === 'about') {
@@ -99,8 +107,7 @@ async function initializeSongsList() {
         li.setAttribute('data-order', ix)
         li.addEventListener("click", (e) => {
             e.stopPropagation()
-            let index = currentIndex === 0 ? 1 : 0
-            updateEverything(index)
+            updateEverything(+!ix)
         })
         songlist.prepend(li)
 
@@ -111,23 +118,21 @@ async function initializeSongsList() {
 function updateCover(index) {
 
     switch (index) {
-        case 0:
-            cover.src = './assets/kennedy.jpg'
-            center.classList.remove('about')
-            break;
-        case 1:
-            cover.src = './assets/composizione.png'
-            center.classList.remove('about')
-            break;
         case undefined:
-            cover.src = './assets/l.png'
+            cover.src = logoUrl
             center.classList.remove('about')
             break;
         case 'about':
-            cover.src = './assets/group.jpg'
+            cover.src = groupPictureUrl
             center.classList.add('about')
             break;
+        default:
+            cover.src = songsUrls[index].cover
+            center.classList.remove('about')
+            break;
+
     }
+
 
 }
 function updateLogotype(index) {
@@ -144,11 +149,16 @@ function updateLogotype(index) {
             break;
         case 'about':
             if (currentIndex !== 'about') {
-                cycleNames()
+                let animation = cycleNames()
+
+                const stopAnimation = () => clearInterval(animation)
+                songs.addEventListener("click", stopAnimation, { once: true })
+                about.addEventListener("click", stopAnimation, { once: true })
             }
             break;
     }
 }
+
 async function updateAudio(index) {
 
     if (index === 'about' || index === undefined) {
@@ -158,7 +168,7 @@ async function updateAudio(index) {
     await actx.resume()
 
 
-    audio.src = index === 1 ? './assets/composizione.mp3' : './assets/parco.mp3'
+    audio.src = songsUrls[index].src
     audio.load()
 
     audio.addEventListener('canplay', () => {
@@ -186,7 +196,7 @@ function updateSongList(index) {
 }
 function updateEverything(index) {
 
-    logotype.style.backgroundPositionX = `0%`
+    logotype.style.backgroundPositionX = `100%`
 
     if (index === currentIndex) {
 
@@ -199,46 +209,91 @@ function updateEverything(index) {
     updateSongList(index)
 
     currentIndex = index
+
+    body.style.background = gradients[Math.trunc(Math.random() * gradients.length)]
+    body.style.backgroundSize = '400% 400%'
+    body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
+
 }
 
 function cycleNames() {
 
 
+    const gen = namesGenerator();
 
     logotype.innerText = gen.next().value
-    let a = setTimeout(() => {
+
+    let a = setInterval(() => {
         logotype.innerText = gen.next().value
-    }, 5000)
-    let b = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 12000)
-    let c = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 19000)
-    let d = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 26000)
-    let e = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 33000)
-    let f = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 40000)
-    let g = setTimeout(() => {
-        logotype.innerText = gen.next().value
-    }, 47000)
+    }, 3000)
+
+    setTimeout(() => {
+        clearInterval(a)
+        console.log('cleared')
+    }, 22000)
+
+    return a
+
 }
 
 
-function* nameGenerator() {
+function* namesGenerator() {
     yield 'prospekt';
-    yield 'leo:vocals';
-    yield 'dan:guitar';
-    yield 'mavi:vocals';
-    yield 'guc:bass';
-    yield 'gioele:drums';
-    yield 'simone:keys';
+    yield 'leo - vocals';
+    yield 'dan - guitar';
+    yield 'mavi - vocals';
+    yield 'guc - bass';
+    yield 'gioele - drums';
+    yield 'simone - keys';
     yield 'prospekt';
 }
 
-const gen = nameGenerator();
+
+function displacementToZeroAnimation() {
+
+    let scale = displacementMap.getAttribute("scale")
+
+    let stepSize = 20
+
+
+    let animation = setInterval(() => {
+
+
+        let newScale = scale - stepSize
+
+        if (newScale <= 0) {
+            displacementMap.setAttribute("scale", `0`)
+            clearInterval(animation)
+            return
+        }
+
+        displacementMap.setAttribute("scale", `${newScale}`)
+
+        scale = newScale
+
+    }, 100);
+
+}
+
+
+async function playPause() {
+
+
+    if (audio.src) {
+
+        if (audio.paused) {
+            await actx.resume()
+            await audio.play()
+            center.classList.add('playing')
+            center.classList.remove('paused')
+        } else {
+            audio.pause()
+            displacementToZeroAnimation()
+            center.classList.add('paused')
+            center.classList.remove('playing')
+        }
+    } else {
+        console.log('no sources')
+    }
+
+}

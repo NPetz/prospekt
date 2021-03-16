@@ -16,7 +16,8 @@
       "title": "Parco Kennedy",
       "date": "",
       "duration": "2:34",
-      "cover": "./assets/kennedy.jpg",
+      "cover": "./assets/pictures/kennedy.jpg",
+      "src": "./assets/songs/parco.mp3",
       "streaming": {
         "youtube": "https://www.youtube.com/watch?v=fv8R8A_g3pI",
         "soundcloud": "https://soundcloud.com/prospekt-band/parco-kennedy",
@@ -28,7 +29,8 @@
       "title": "Composizione I",
       "date": "",
       "duration": "3:02",
-      "cover": "./assets/composizione.png",
+      "cover": "./assets/pictures/composizione.png",
+      "src": "./assets/songs/composizione.mp3",
       "streaming": {
         "youtube": "https://www.youtube.com/watch?v=kpbenjgxbN0"
       }
