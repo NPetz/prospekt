@@ -24,11 +24,6 @@ let currentIndex
 const logoUrl = "./assets/pictures/l.png"
 const groupPictureUrl = "./assets/pictures/group.jpg"
 
-// 
-let previousTime = 0
-// 
-
-
 // analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let actx = new AudioContext();
@@ -51,25 +46,17 @@ initializeSongsList()
 
 audio.addEventListener('timeupdate', () => {
 
-    let currentTime = audio.currentTime
+    analyser.getByteTimeDomainData(dataArray)
+    let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
+    let average = sum / bufferLength
 
-    if (currentTime - previousTime > 0.01) {
 
-        analyser.getByteTimeDomainData(dataArray)
-        let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
+    average > 120 || turbulence.setAttribute('seed', sum), displacementMap.setAttribute('scale', sum / bufferLength)
+    centerContent.style.transform = `scale(${mapValue(average, 0, 256, 0.5, 1.1)})`
 
-        if (sum / bufferLength > 150) {
 
-            turbulence.setAttribute('seed', sum)
-            displacementMap.setAttribute('scale', sum / bufferLength)
-
-        }
-
-        let percentage = Math.trunc(currentTime * 100 / audio.duration)
-        logotype.style.backgroundPositionX = `${100 - percentage}%`
-
-        previousTime = currentTime
-    }
+    let percentage = Math.trunc(currentTime * 100 / audio.duration)
+    logotype.style.backgroundPositionX = `${100 - percentage}%`
 
 })
 
@@ -275,6 +262,55 @@ function displacementToZeroAnimation() {
 
 }
 
+function scaleToOneAnimation() {
+
+    let scale = +centerContent.style.transform.match(/scale\((.*)\)/)[1]
+
+    let stepSize = 0.05
+
+    if (scale > 1) {
+        let animation = setInterval(() => {
+
+
+            let newScale = scale - stepSize
+
+            if (newScale <= 1) {
+                centerContent.style.transform = "scale(1.0)"
+                clearInterval(animation)
+                return
+            }
+
+            centerContent.style.transform = `scale(${newScale})`
+
+            scale = newScale
+
+        }, 100);
+    } else if (scale < 1) {
+        let animation = setInterval(() => {
+
+
+            let newScale = scale + stepSize
+
+            if (newScale >= 1) {
+                centerContent.style.transform = "scale(1.0)"
+                clearInterval(animation)
+                return
+            }
+
+            centerContent.style.transform = `scale(${newScale})`
+
+            console.log(newScale)
+
+            scale = newScale
+
+        }, 100);
+    }
+
+
+
+}
+
+
 
 async function playPause() {
 
@@ -289,6 +325,7 @@ async function playPause() {
         } else {
             audio.pause()
             displacementToZeroAnimation()
+            scaleToOneAnimation()
             center.classList.add('paused')
             center.classList.remove('playing')
         }
@@ -296,4 +333,8 @@ async function playPause() {
         console.log('no sources')
     }
 
+}
+
+function mapValue(num, in_min, in_max, out_min, out_max) {
+    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 }
