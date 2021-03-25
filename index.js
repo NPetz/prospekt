@@ -13,10 +13,7 @@ const pausePlay = document.querySelector('#pausePlay')
 const displacementMap = filter.querySelector('fedisplacementmap')
 const turbulence = filter.querySelector('feturbulence')
 
-const gradients = ['linear-gradient(to bottom, #eb5757, #222)', 'linear-gradient(to bottom, #1247b8, #e01c36)', 'linear-gradient(to bottom, #fffb29, #7c04af)', 'linear-gradient(to bottom, #00467f, #2fb643)'
-
-
-]
+const gradients = ['linear-gradient(to bottom, #43e97b , #38f9d7 );', 'linear-gradient(to bottom, #1247b8, #e01c36)', 'linear-gradient(to bottom, #fffb29, #7c04af)', 'linear-gradient(to bottom, #00467f, #2fb643)', 'linear-gradient(to top, #30cfd0 0%, #330867 100%);', 'linear-gradient(to bottom, #434343 0%, black 100%);']
 
 let songsUrls
 let currentIndex
@@ -210,7 +207,9 @@ function updateEverything(index) {
 
     currentIndex = index
 
-    body.style.background = gradients[Math.trunc(Math.random() * gradients.length)]
+    let randomGradientIndex = Math.round(Math.random() * gradients.length)
+    console.log(randomGradientIndex)
+    body.style.background = gradients[randomGradientIndex]
     body.style.backgroundSize = '400% 400%'
     body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
 

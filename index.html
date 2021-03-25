@@ -11,23 +11,34 @@
       async
     ></script>
     <link rel="stylesheet" href="style.css" />
-    <script src="index.js" type="module" type="text/javascript" defer></script>
+    <script
+      src="betterIndex.js"
+      type="module"
+      type="text/javascript"
+      defer
+    ></script>
     <title>Prospэkt</title>
   </head>
   <body>
-    <section id="songs">
-      <h1>songs</h1>
-      <ul id="songlist"></ul>
+    <section id="songsection">
+      <ul id="singleslist"></ul>
     </section>
 
-    <div id="center">
-      <div id="center-content">
-        <img id="centerlogo" src="./assets/pictures/l.png" />
-        <h1 id="logotype">PROSPEKT</h1>
+    <section id="centersection">
+      <div id="centercontent">
+        <img id="centerimage" src="./assets/pictures/l.png" />
+        <h1 id="centertext">PROSPEKT</h1>
       </div>
-    </div>
+    </section>
 
-    <section id="about">
+    <section id="credits">
+      <span>made with 💖 by <a href="https://github.com/NPetz">NPetz</a> </span>
+    </section>
+
+    <section id="socialsection">
+      <a href="https://www.facebook.com/prospektband/"
+        ><i class="fab fa-facebook-square"></i>
+      </a>
       <a href="https://www.instagram.com/_prospekt/"
         ><i class="fab fa-instagram-square"></i
       ></a>
@@ -37,16 +48,15 @@
       <a href="https://www.youtube.com/channel/UC-KtNn7ZrHkjV7hdtws8HlQ"
         ><i class="fab fa-youtube-square"></i
       ></a>
-
-      <div class="logo">
-        <img src="./assets/pictures/l.png" />
-        <span>ABOUT</span>
-      </div>
+      <a href="https://music.apple.com/us/artist/prosp%D1%8Dkt/1544322970"
+        ><i class="fab fa-itunes"></i
+      ></a>
     </section>
 
-    <div id="pausePlay"></div>
+    <div id="controller"></div>
 
-    <!-- svg filter -->
+    <div id="aboutwrapper"></div>
+
     <svg>
       <filter id="blob">
         <feturbulence
@@ -64,6 +74,43 @@
           scale="0"
         ></fedisplacementmap>
       </filter>
+    </svg>
+
+    <svg
+      id="wave"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1440 320"
+      style="display: block"
+    >
+      <path
+        id="waveshape"
+        fill="whitesmoke"
+        fill-opacity="1"
+        d="M0,256L40,245.3C80,235,160,213,240,170.7C320,128,400,64,480,80C560,96,640,192,720,229.3C800,267,880,245,960,208C1040,171,1120,117,1200,106.7C1280,96,1360,128,1400,144L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
+      />
+      <animate
+        xlink:href="#waveshape"
+        attributeName="d"
+        values="M0,256L40,245.3C80,235,160,213,240,170.7C320,128,400,64,480,80C560,96,640,192,720,229.3C800,267,880,245,960,208C1040,171,1120,117,1200,106.7C1280,96,1360,128,1400,144L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z;M0,320L40,288C80,256,160,192,240,181.3C320,171,400,213,480,234.7C560,256,640,256,720,245.3C800,235,880,213,960,181.3C1040,149,1120,107,1200,96C1280,85,1360,107,1400,117.3L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z;M0,64L40,101.3C80,139,160,213,240,250.7C320,288,400,288,480,288C560,288,640,288,720,277.3C800,267,880,245,960,240C1040,235,1120,245,1200,213.3C1280,181,1360,107,1400,69.3L1440,32L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z;M0,256L40,245.3C80,235,160,213,240,170.7C320,128,400,64,480,80C560,96,640,192,720,229.3C800,267,880,245,960,208C1040,171,1120,117,1200,106.7C1280,96,1360,128,1400,144L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
+        dur="1s"
+        repeatCount="indefinite"
+      />
+      <animateTransform
+        xlink:href="#waveshape"
+        attributeName="transform"
+        type="translateX"
+        values='0;100;0'
+        dur="2s"
+        repeatCount="indefinite"
+      />
+      <animateTransform
+      xlink:href="#waveshape"
+      attributeName="transform"
+      type="scale"
+      values='1;2;1'
+      dur="2s"
+      repeatCount="indefinite"
+    />
     </svg>
   </body>
 </html>

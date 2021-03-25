@@ -14,6 +14,17 @@ svg {
   display: none;
 }
 
+#credits {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+}
+#credits a {
+  color: #111;
+}
+
 body {
   height: 100vh;
   width: 100vw;
@@ -25,6 +36,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  overflow: hidden;
 }
 section {
   flex-grow: 1;
@@ -32,9 +44,11 @@ section {
   place-items: center;
 }
 
-#center {
+/* CENTER SECTION */
+
+#centersection {
   filter: url("#blob") drop-shadow(0 0 50px whitesmoke);
-  mix-blend-mode: luminosity;
+  /* mix-blend-mode: luminosity; */
   /* mix-blend-mode: multiply; */
   width: 100%;
   position: relative;
@@ -44,7 +58,7 @@ section {
   justify-content: center;
 }
 
-#center-content {
+#centercontent {
   width: 60%;
   display: flex;
   flex-direction: column;
@@ -55,36 +69,32 @@ section {
   overflow: hidden;
 }
 
-#centerlogo {
+#centerimage {
   width: 100%;
   margin-bottom: 0.2rem;
   /* filter: invert(); */
 }
-#centerlogo:hover {
+#centerimage:hover {
   cursor: pointer;
 }
-#center-content:hover {
-  /* animation: rotation 2.5s ease-in-out 1; */
-  /* filter: none; */
-}
 
-#center.about #center-content {
+#centersection.about #centercontent {
   transform: scale(1.5);
 }
 
-#center.about #centerlogo {
+#centersection.about #centerimage {
   animation: show-faces 20s cubic-bezier(0.165, 0.84, 0.44, 1) 3s 1 alternate;
   /* filter: none; */
 }
 
-#center.about #logotype {
+#centersection.about #centertext {
   position: fixed;
   bottom: 0.5rem;
   left: 0.5rem;
   font-size: 1rem;
 }
 
-#logotype {
+#centertext {
   width: 100%;
   font-size: calc(100vw * 0.6 / 6.11);
   text-align: left;
@@ -99,88 +109,81 @@ section {
   background-position-x: 100%;
 }
 
-.playing #logotype:hover {
+.playing #centertext:hover {
   cursor: crosshair;
 }
-.paused #logotype:hover {
+.paused #centertext:hover {
   cursor: move;
 }
 
-ul,
-li {
+/* SONG SECTION */
+
+#singleslist {
   list-style-type: none;
+  filter: drop-shadow(0px 3px 2px #333);
+  width: 50vw;
+  overflow-x: hidden;
+  display: flex;
+  box-shadow: whitesmoke 0 1px 0.1px, whitesmoke 0 -1px 0.1px;
+  backdrop-filter: blur(10px);
+}
+
+#singleslist li {
   width: 100%;
-}
-
-ul {
-  display: none;
-}
-
-li.active::before,
-li.active::after {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-
-li.active::before {
-  content: "<";
-}
-li.active::after {
-  content: ">";
-}
-
-li {
-  width: 100%;
+  flex-grow: 1;
   cursor: pointer;
   transition: 0.2s all;
-  position: relative;
-  display: none;
-  height: 100%;
   text-align: center;
-}
+  display: none;
 
-li.active {
+  padding: 1rem;
+}
+#singleslist li.selectedsong {
   display: block;
 }
-
-.logo {
-  text-align: center;
-  color: whitesmoke;
-  width: 40px;
-  height: 40px;
-  font-size: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-}
-.logo img {
-  width: 100%;
-  margin-bottom: 0.2rem;
-  border-radius: 8px;
-  filter: invert();
-  mix-blend-mode: lighten;
+#singleslist li {
+  background-image: url("#wave");
+  color: #111;
+  background-repeat: repeat-x;
+  background-size: 400% 400%;
 }
 
-#about {
+/* INFO SECTION */
+
+#socialsection {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 1rem;
   font-size: 40px;
 }
-#about i {
+#socialsection i {
   color: whitesmoke;
 }
-#about i:hover {
+#socialsection i:hover {
   color: rgba(255, 255, 255, 0.5);
 }
 
-#songs h1,
-#songs li {
-  filter: drop-shadow(0px 3px 2px #333);
+/* ABOUT */
+
+#aboutwrapper {
+  position: fixed;
+  bottom: 20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 1rem;
   cursor: pointer;
+  width: max-content;
+  display: grid;
+  place-items: center;
+  height: 50px;
 }
+#aboutwrapper::before {
+  content: "about";
+}
+
+/* PLAYPAUSE */
 
 /* animations */
 
@@ -198,7 +201,6 @@ li.active {
     background-position: bottom;
   }
 }
-
 @keyframes show-faces {
   0% {
     transform: scale(1);
@@ -243,45 +245,55 @@ li.active {
 }
 /* queries */
 
-@media (min-width: 768px) {
+@media (min-width: 568px) {
+  html {
+    font-size: 20px;
+  }
   body {
     flex-direction: row;
   }
-
   section {
     display: grid;
     width: 25vw;
   }
-  #center {
+  #centersection {
     width: 50vw;
     flex-grow: 1;
   }
-  #logotype {
-    /* text-shadow: whitesmoke 0 0 2px; */
+  #centertext {
     font-size: calc(50vw * 0.6 / 6.11);
   }
-  html {
-    font-size: 20px;
-  }
-  li.active::before,
-  li.active::after {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
+
+  #singleslist {
+    width: 80%;
   }
 
-  li.active::before {
-    content: "^";
-
-    padding-bottom: 1rem;
-  }
-  li.active::after {
-    content: "^";
-    transform: rotateZ(180deg);
-    padding-bottom: 1rem;
-  }
-  #about {
+  #socialsection {
     flex-direction: column;
   }
+  #aboutwrapper {
+    bottom: 7.5vh;
+  }
 }
+
+/* possible tranforms play button
+
+    transform: matrix3d(20,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,1,0,0,0,0,1);
+    transform-origin: left center 0px;
+
+
+
+    transform: translate(25%, 0px) matrix3d(22,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,0,0,0,0,0,1) 
+    transform-origin: left center 0px;
+*/
+
+/* possible tranforms pause button
+
+    transform: matrix3d(20,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,1,0,0,0,0,1);
+    transform-origin: left center 0px;
+
+
+
+    transform: translate(25%, 0px) matrix3d(22,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,0,0,0,0,0,1) 
+    transform-origin: left center 0px;
+*/
