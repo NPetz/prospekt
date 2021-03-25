@@ -19,12 +19,14 @@ body {
   width: 100vw;
   background: linear-gradient(to bottom, #2a4e9c, #e01c36);
   background-size: 400% 400%;
-  animation: moving-gradient 15s ease-in-out infinite alternate;
+  /* to do: find a better way of having moving gradient without gpu frying */
+  /* animation: moving-gradient 15s ease-in-out infinite alternate; */
   color: whitesmoke;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  overflow: hidden;
 }
 section {
   flex-grow: 1;

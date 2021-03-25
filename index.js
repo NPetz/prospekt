@@ -24,6 +24,10 @@ let currentIndex
 const logoUrl = "./assets/pictures/l.png"
 const groupPictureUrl = "./assets/pictures/group.jpg"
 
+// 
+let previousTime = 0
+// 
+
 // analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let actx = new AudioContext();
@@ -46,17 +50,21 @@ initializeSongsList()
 
 audio.addEventListener('timeupdate', () => {
 
+    let currentTime = audio.currentTime
+
     analyser.getByteTimeDomainData(dataArray)
     let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
     let average = sum / bufferLength
 
 
-    average > 120 || turbulence.setAttribute('seed', sum), displacementMap.setAttribute('scale', sum / bufferLength)
+    turbulence.setAttribute('seed', sum), displacementMap.setAttribute('scale', sum / bufferLength)
     centerContent.style.transform = `scale(${mapValue(average, 0, 256, 0.5, 1.1)})`
 
 
     let percentage = Math.trunc(currentTime * 100 / audio.duration)
     logotype.style.backgroundPositionX = `${100 - percentage}%`
+
+    previousTime = currentTime
 
 })
 
@@ -159,6 +167,7 @@ async function updateAudio(index) {
     audio.load()
 
     audio.addEventListener('canplay', () => {
+        // body.style.animation = 'none'
         audio.play()
         console.log('can play');
     }, { once: true })
@@ -198,8 +207,9 @@ function updateEverything(index) {
     currentIndex = index
 
     body.style.background = gradients[Math.trunc(Math.random() * gradients.length)]
-    body.style.backgroundSize = '400% 400%'
-    body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
+    // to do: find a better way of having moving gradient without gpu frying 
+    // body.style.backgroundSize = '400% 400%'
+    // body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
 
 }
 
@@ -317,11 +327,15 @@ async function playPause() {
 
     if (audio.src) {
 
+        // body.style.animation = 'none'
+
         if (audio.paused) {
             await actx.resume()
             await audio.play()
             center.classList.add('playing')
             center.classList.remove('paused')
+
+
         } else {
             audio.pause()
             displacementToZeroAnimation()
