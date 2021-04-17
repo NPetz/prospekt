@@ -1,298 +1,162 @@
+// imports
+import { Gradient, normalizeColor } from './gradient.js'
+// DOM Elements Memoing
 
 const body = document.body
-const cover = document.querySelector("#centerlogo")
-const center = document.querySelector('#center')
-const centerContent = document.querySelector('#center-content')
-const logotype = document.querySelector("#logotype")
+const centerimage = document.querySelector("#centerimage")
+const centersection = document.querySelector('#centersection')
+const centercontent = document.querySelector('#centercontent')
+const centertext = document.querySelector("#centertext")
 const filter = document.querySelector("#blob")
-const songlist = document.querySelector("#songlist")
-const about = document.querySelector(".logo img")
-const songs = document.querySelector("#songs")
-const pausePlay = document.querySelector('#pausePlay')
+const singleslist = document.querySelector("#singleslist")
+const socialsection = document.querySelector('#socialsection')
+const aboutwrapper = document.querySelector("#aboutwrapper")
+const songsection = document.querySelector("#songsection")
+const controller = document.querySelector('#controller')
+const gradientCanvas = document.querySelector('#gradient-canvas')
+
 
 const displacementMap = filter.querySelector('fedisplacementmap')
 const turbulence = filter.querySelector('feturbulence')
 
-const gradients = ['linear-gradient(to bottom, #43e97b , #38f9d7 );', 'linear-gradient(to bottom, #1247b8, #e01c36)', 'linear-gradient(to bottom, #fffb29, #7c04af)', 'linear-gradient(to bottom, #00467f, #2fb643)', 'linear-gradient(to top, #30cfd0 0%, #330867 100%);', 'linear-gradient(to bottom, #434343 0%, black 100%);']
+// other useful memoing
 
-let songsUrls
-let currentIndex
+
+let currentScreen = 'home'
+let playerStatus = 'initial'
+let currentSong = null
 
 const logoUrl = "./assets/pictures/l.png"
 const groupPictureUrl = "./assets/pictures/group.jpg"
 
-// 
+// memoing for the custom player
+
 let previousTime = 0
-// 
 
-
-// analyzer
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let actx = new AudioContext();
 const analyser = actx.createAnalyser();
 analyser.fftSize = 64;
-
 let bufferLength = analyser.frequencyBinCount;
 let dataArray = new Uint8Array(bufferLength);
-
-let audio = new Audio()
-let src = actx.createMediaElementSource(audio)
+let player = new Audio()
+let src = actx.createMediaElementSource(player)
 src.connect(analyser);
 analyser.connect(actx.destination);
 
+// initialise backgorund canvas
+
+var gradient = new Gradient();
+gradient.initGradient("#gradient-canvas");
+
+// initialize DOM with songs
 
 initializeSongsList()
 
+//////////////////////////////
 
 
 
-audio.addEventListener('timeupdate', () => {
 
-    let currentTime = audio.currentTime
 
-    if (currentTime - previousTime > 0.01) {
 
-        analyser.getByteTimeDomainData(dataArray)
-        let sum = dataArray.reduce((accumulator, currentValue) => accumulator + currentValue)
 
-        if (sum / bufferLength > 150) {
 
-            turbulence.setAttribute('seed', sum)
-            displacementMap.setAttribute('scale', sum / bufferLength)
 
-        }
 
-        let percentage = Math.trunc(currentTime * 100 / audio.duration)
-        logotype.style.backgroundPositionX = `${100 - percentage}%`
 
-        previousTime = currentTime
+
+
+
+
+
+
+
+
+
+
+// FUNCTIONS
+
+
+
+
+// TO INITIALIZE DOM & FETCH DATA
+// fetch data
+async function fetchSongsData() {
+    try {
+
+        let res = await fetch("./data.json")
+        let data = await res.json()
+        return data
+
+    } catch (error) {
+        console.log(error)
+        console.log('couldnt fetch songs data')
     }
-
-})
-
-pausePlay.addEventListener("click", playPause)
-cover.addEventListener("click", playPause)
-
-
-about.addEventListener('click', () => {
-
-    if (currentIndex === 'about') {
-        updateEverything()
-    } else {
-        updateEverything('about')
-    }
-
-})
-
-songs.addEventListener('click', () => {
-    updateEverything(0)
-})
-
-async function initializeSongsList() {
-
-    let res = await fetch("./data.json")
-    let data = await res.json()
+}
+// initalize DOM from Data
+function createSongElementsFromData(data) {
 
     if (data) {
-        songsUrls = data.singles
+
+        data.singles.forEach((el, ix) => {
+
+
+
+            let li = document.createElement("li")
+            li.innerText = el.title
+            li.setAttribute('data-order', ix)
+            li.addEventListener("click", clickOnSongName)
+            singleslist.prepend(li)
+
+            if (!ix) {
+                li.classList.add('selectedsong')
+            }
+        })
+
+    } else {
+        console.log('your data is non-existent')
     }
 
-    data.singles.forEach((el, ix) => {
+}
+// put those things together 
+async function initializeSongsList() {
 
-        let li = document.createElement("li")
-        li.innerText = el.title
-        li.setAttribute('data-order', ix)
-        li.addEventListener("click", (e) => {
-            e.stopPropagation()
-            updateEverything(+!ix)
-        })
-        songlist.prepend(li)
+    let songsData = await fetchSongsData()
+    createSongElementsFromData(songsData)
+
+}
+/////////////////////////////////////////////
+
+
+
+// EVENT HANDLERS
+
+function clickOnSongName() {
+    console.log('song')
+    changeGradient()
+}
+
+// STATE MANAGEMENT
+
+// ANIMATIONS
+
+function changeGradient() {
+
+    gradient.uniforms.u_waveLayers.value.forEach((v, ix) => {
+        let hex = Please.make_color({ saturation: (Math.random() + 1) / 2, value: (Math.random() + 1) / 2 })[0]
+        let normalCol = normalizeColor('0x' + hex.substring(1))
+        v.value.color.value = normalCol
 
     })
+    gradient.uniforms.u_baseColor.value = normalizeColor('0x' + Please.make_color({ saturation: 1.0 })[0].substring(1))
 
-
-}
-function updateCover(index) {
-
-    switch (index) {
-        case undefined:
-            cover.src = logoUrl
-            center.classList.remove('about')
-            break;
-        case 'about':
-            cover.src = groupPictureUrl
-            center.classList.add('about')
-            break;
-        default:
-            cover.src = songsUrls[index].cover
-            center.classList.remove('about')
-            break;
-
-    }
-
-
-}
-function updateLogotype(index) {
-
-    switch (index) {
-        case 0:
-            logotype.innerText = songsUrls[index].title
-            break;
-        case 1:
-            logotype.innerText = songsUrls[index].title
-            break;
-        case undefined:
-            logotype.innerText = 'prospekt'
-            break;
-        case 'about':
-            if (currentIndex !== 'about') {
-                let animation = cycleNames()
-
-                const stopAnimation = () => clearInterval(animation)
-                songs.addEventListener("click", stopAnimation, { once: true })
-                about.addEventListener("click", stopAnimation, { once: true })
-            }
-            break;
-    }
-}
-
-async function updateAudio(index) {
-
-    if (index === 'about' || index === undefined) {
-        return
-    }
-
-    await actx.resume()
-
-
-    audio.src = songsUrls[index].src
-    audio.load()
-
-    audio.addEventListener('canplay', () => {
-        audio.play()
-        console.log('can play');
-    }, { once: true })
-
-
-}
-function updateSongList(index) {
-
-    if (index === 'about' || index === undefined) {
-        songs.querySelector(`h1`).style.display = 'flex'
-        songs.querySelector(`ul`).style.display = 'none'
-        songs.querySelector(`li.active`)?.classList.remove('active')
-        return
-    }
-
-    songs.querySelector(`h1`).style.display = 'none'
-    songs.querySelector(`ul`).style.display = 'flex'
-    songs.querySelector(`li.active`)?.classList.remove('active')
-    songs.querySelector(`li[data-order="${index}"]`).classList.add('active')
-
-
-}
-function updateEverything(index) {
-
-    logotype.style.backgroundPositionX = `100%`
-
-    if (index === currentIndex) {
-
-        return
-    }
-
-    updateCover(index)
-    updateLogotype(index)
-    updateAudio(index)
-    updateSongList(index)
-
-    currentIndex = index
-
-    let randomGradientIndex = Math.round(Math.random() * gradients.length)
-    console.log(randomGradientIndex)
-    body.style.background = gradients[randomGradientIndex]
-    body.style.backgroundSize = '400% 400%'
-    body.style.animation = 'moving-gradient 15s ease-in-out infinite alternate'
-
-}
-
-function cycleNames() {
-
-
-    const gen = namesGenerator();
-
-    logotype.innerText = gen.next().value
-
-    let a = setInterval(() => {
-        logotype.innerText = gen.next().value
-    }, 3000)
-
-    setTimeout(() => {
-        clearInterval(a)
-        console.log('cleared')
-    }, 22000)
-
-    return a
+    gradient.uniforms.u_global.value.noiseSpeed.value = Math.random() / 70000
+    gradient.uniforms.u_global.value.noiseFreq.value = [Math.random() / 2000, Math.random() / 2000]
 
 }
 
 
-function* namesGenerator() {
-    yield 'prospekt';
-    yield 'leo - vocals';
-    yield 'dan - guitar';
-    yield 'mavi - vocals';
-    yield 'guc - bass';
-    yield 'gioele - drums';
-    yield 'simone - keys';
-    yield 'prospekt';
-}
 
 
-function displacementToZeroAnimation() {
-
-    let scale = displacementMap.getAttribute("scale")
-
-    let stepSize = 20
-
-
-    let animation = setInterval(() => {
-
-
-        let newScale = scale - stepSize
-
-        if (newScale <= 0) {
-            displacementMap.setAttribute("scale", `0`)
-            clearInterval(animation)
-            return
-        }
-
-        displacementMap.setAttribute("scale", `${newScale}`)
-
-        scale = newScale
-
-    }, 100);
-
-}
-
-
-async function playPause() {
-
-
-    if (audio.src) {
-
-        if (audio.paused) {
-            await actx.resume()
-            await audio.play()
-            center.classList.add('playing')
-            center.classList.remove('paused')
-        } else {
-            audio.pause()
-            displacementToZeroAnimation()
-            center.classList.add('paused')
-            center.classList.remove('playing')
-        }
-    } else {
-        console.log('no sources')
-    }
-
-}
+// UTILS
