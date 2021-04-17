@@ -110,7 +110,7 @@ function createSongElementsFromData(data) {
             singleslist.prepend(li)
 
             if (!ix) {
-                li.classList.add('selectedsong')
+                // li.classList.add('selectedsong')
             }
         })
 
