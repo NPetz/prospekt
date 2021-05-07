@@ -10,10 +10,6 @@
   font-family: "azonix", sans-serif;
 }
 
-svg {
-  display: none;
-}
-
 /* BACKGROUND */
 
 #gradient-canvas {
@@ -31,8 +27,22 @@ svg {
 
 /* MAIN */
 
+.glslCanvas {
+  height: 100vh;
+  width: 20vw;
+  position: absolute;
+  top: 0;
+  filter: drop-shadow(0 0 5px black);
+  /* transform: translateX(-20vw); */
+  transition: all 0.5s;
+  border: 2px red solid;
+}
+.glslCanvas:hover {
+  transform: translateX(0%);
+}
+
 #credits {
-  height: 5vh;
+  height: 20px;
   flex-grow: 0;
   font-size: 8px;
   white-space: nowrap;
@@ -66,7 +76,7 @@ section {
 /* CENTER SECTION */
 
 #centersection {
-  filter: url("#blob");
+  filter: url("#distortion");
   width: 100%;
   position: relative;
   display: flex;
@@ -79,7 +89,7 @@ section {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   filter: drop-shadow(0 0 2px black);
   max-width: 90vw;
@@ -97,8 +107,10 @@ section {
   filter: invert();
   object-fit: scale-down;
 }
-#centerimage:hover {
-  cursor: pointer;
+
+#centertext {
+  fill: whitesmoke;
+  font-size: 16px;
 }
 
 #socials {
@@ -120,127 +132,11 @@ section {
   opacity: 0.5;
 }
 
-#centersection.about #centercontent {
-  transform: scale(1.5);
-}
-
-#centersection.about #centerimage {
-  animation: show-faces 20s cubic-bezier(0.165, 0.84, 0.44, 1) 3s 1 alternate;
-  /* filter: none; */
-}
-
-#centersection.about #centertext {
-  position: fixed;
-  bottom: 0.5rem;
-  left: 0.5rem;
-  font-size: 1rem;
-}
-
-#centertext {
-  width: 100%;
-  font-size: calc(100vw * 0.6 / 6.11);
-  text-align: left;
-  color: transparent;
-  background-image: linear-gradient(90deg, black 50%, whitesmoke 50%);
-  background-origin: border-box;
-  background-repeat: no-repeat;
-  background-size: 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  word-wrap: break-word;
-  background-position-x: 100%;
-}
-
-.playing #centertext:hover {
-  cursor: crosshair;
-}
-.paused #centertext:hover {
-  cursor: move;
-}
-
 /* SONG SECTION */
-#songsection {
-  display: flex;
-  flex-wrap: nowrap;
-  scroll-snap-type: x mandatory;
-  overflow-x: auto;
-}
-
-#albums,
-#singles {
-  height: 100%;
-  max-height: 100%;
-  flex: 1 0 100%;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-#albums ul,
-#singles ul {
-  display: none;
-}
-
-:is(#albums, #singles):focus ul,
-:is(#albums, #singles):focus-within ul,
-:is(#albums, #singles):active ul {
-  display: block;
-}
-:is(#albums, #singles):focus p,
-:is(#albums, #singles):focus-within p,
-:is(#albums, #singles):active p {
-  display: none;
-}
-
-#singleslist,
-#albumslist {
-  list-style-type: none;
-  filter: drop-shadow(0px 3px 2px #333);
-  overflow-x: hidden;
-  display: flex;
-  box-shadow: whitesmoke 0 1px 0.1px, whitesmoke 0 -1px 0.1px;
-  backdrop-filter: saturate(1.5) brightness(0.5);
-}
-
-#singleslist li {
-  width: 100%;
-  flex-grow: 1;
-  cursor: pointer;
-  transition: 0.2s all;
-  text-align: center;
-  padding: 1rem;
-}
-#singleslist li.selectedsong {
-  display: block;
-}
-#singleslist li {
-  color: #eee;
-  background-repeat: repeat-x;
-  background-size: 400% 400%;
-}
 
 /* INFO SECTION */
 
 /* ABOUT */
-
-#aboutwrapper {
-  position: fixed;
-  bottom: 20vh;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  font-size: 1rem;
-  cursor: pointer;
-  width: max-content;
-  display: grid;
-  place-items: center;
-  height: 50px;
-}
-#aboutwrapper::before {
-  content: "about";
-}
 
 /* PLAYPAUSE */
 
@@ -291,13 +187,10 @@ section {
 /* queries */
 
 @media (min-width: 568px) {
-  html {
-    font-size: 20px;
-  }
   body {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 5vh;
+    grid-template-columns: 1fr 35vw 1fr;
+    grid-template-rows: 1fr 20px;
     grid-template-areas:
       "a b c"
       "d d d";
@@ -305,7 +198,7 @@ section {
   #songsection,
   #centersection,
   #infosection {
-    height: 95vh;
+    height: calc(100vh - 20px);
   }
 
   #songsection {
@@ -314,15 +207,8 @@ section {
   #centersection {
     grid-area: b;
   }
-  #centercontent {
-    width: min-content;
-  }
   #infosection {
     grid-area: c;
-  }
-
-  #centertext {
-    font-size: calc(50vw * 0.6 / 6.11);
   }
 
   #socials {
@@ -340,25 +226,3 @@ section {
     width: 100%;
   }
 }
-
-/* possible tranforms play button
-
-    transform: matrix3d(20,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,1,0,0,0,0,1);
-    transform-origin: left center 0px;
-
-
-
-    transform: translate(25%, 0px) matrix3d(22,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,0,0,0,0,0,1) 
-    transform-origin: left center 0px;
-*/
-
-/* possible tranforms pause button
-
-    transform: matrix3d(20,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,1,0,0,0,0,1);
-    transform-origin: left center 0px;
-
-
-
-    transform: translate(25%, 0px) matrix3d(22,0,0.02,0.1,0.00,1,0.00,0,-0.02,0,0,0,0,0,0,1) 
-    transform-origin: left center 0px;
-*/

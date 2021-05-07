@@ -18,6 +18,18 @@
       crossorigin="anonymous"
       defer
     ></script>
+    <script
+      type="text/javascript"
+      src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"
+      defer
+    ></script>
+    <script
+      src="canvasmenu.js"
+      type="module"
+      type="text/javascript"
+      defer
+    ></script>
+
     <title>Prospэkt</title>
   </head>
   <body>
@@ -25,16 +37,7 @@
     </canvas>
 
     <section id="songsection">
-      <div id="albums">
-        <p>albums</p>
-        <ul id="albumslist">
-          <li>Empty</li>
-        </ul>
-      </div>
-      <div id="singles">
-        <p>singles</p>
-        <ul id="singleslist"></ul>
-      </div>
+      <canvas class="glslCanvas" data-fragment-url="shader.frag"></canvas>
     </section>
 
     <section id="centersection">
@@ -65,7 +68,9 @@
           </ul>
         </div>
 
-        <h1 id="centertext">PROSPEKT</h1>
+        <svg id="centertext" viewBox="0 0 97 16">
+          <text x="0" y="13">PROSPEKT</text>
+        </svg>
       </div>
     </section>
 
@@ -75,12 +80,8 @@
       <span>made with 💖 by <a href="https://github.com/NPetz">NPetz</a> </span>
     </section>
 
-    <div id="controller"></div>
-
-    <!-- <div id="aboutwrapper"></div> -->
-
-    <svg>
-      <filter id="blob">
+    <svg style="display: none">
+      <filter id="distortion">
         <feturbulence
           basefrequency="0.01 0.005"
           id="frequency1"

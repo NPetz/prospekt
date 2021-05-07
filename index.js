@@ -7,13 +7,14 @@ const centerimage = document.querySelector("#centerimage")
 const centersection = document.querySelector('#centersection')
 const centercontent = document.querySelector('#centercontent')
 const centertext = document.querySelector("#centertext")
-const filter = document.querySelector("#blob")
+const filter = document.querySelector("#distortion")
 const singleslist = document.querySelector("#singleslist")
 const socialsection = document.querySelector('#socialsection')
 const aboutwrapper = document.querySelector("#aboutwrapper")
 const songsection = document.querySelector("#songsection")
 const controller = document.querySelector('#controller')
 const gradientCanvas = document.querySelector('#gradient-canvas')
+
 
 
 const displacementMap = filter.querySelector('fedisplacementmap')
@@ -48,6 +49,7 @@ analyser.connect(actx.destination);
 
 var gradient = new Gradient();
 gradient.initGradient("#gradient-canvas");
+
 
 // initialize DOM with songs
 
